@@ -165,7 +165,7 @@ function App() {
     setId('')
     setError(null)
   }
-  
+ 
   return (
     <div className="container mt-5">
       <h1 className="text-center">ALUMNOS</h1>
@@ -215,30 +215,39 @@ function App() {
               value = {apellidos}
             />
             <input
-              type="number"
+              type="tel"
+              pattern='\d{2}'
+              maxlength="2"
+              min='1'
+              max='99'
               className='form-control mb-2'
-              placeholder='Ingrese edad'
+              placeholder='Ingrese edad ej. 26'
               onChange={e => setEdad(e.target.value)}
               value = {edad}
             />
             <input
-              type="number"
+              type="tel"
+              pattern='\d{10}'
+              maxlength="10"
               className='form-control mb-2'
-              placeholder='Ingrese identificación'
+              placeholder='Ingrese identificación ej. 1082989235'
               onChange={e => setIdentificacion(e.target.value)}
               value = {identificacion}
             />
             <input
-              type="number"
+              type="tel"
+              pattern='^[3]\d{9}$'
+              maxlength="10"
               className='form-control mb-2'
-              placeholder='Ingrese celular'
+              placeholder='Ingrese celular ej. 3003017525'
               onChange={e => setCelular(e.target.value)}
               value = {celular}
             />
             <input
-              type="mail"
+              type="email"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
               className='form-control mb-2'
-              placeholder='Ingrese correo'
+              placeholder='Ingrese correo ej. alvaro@gmail.com'
               onChange={e => setCorreo(e.target.value)}
               value = {correo}
             />
@@ -271,7 +280,6 @@ function App() {
           </form>
         </div>
       </div>
-      
     </div>
   );
 }
