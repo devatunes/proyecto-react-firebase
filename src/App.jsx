@@ -1,6 +1,6 @@
-import './App.css';
-import { nanoid } from 'nanoid';
+//import { specialCharMap } from '@testing-library/user-event/dist/keyboard';
 import React from 'react';
+import { firebase } from './Firebase';
 
 function App() {
   const [nombres, setNombres] = React.useState('')
@@ -15,7 +15,27 @@ function App() {
   const [error, setError] = React.useState(null)
   const [modoEdicion, setModoEdicion] = React.useState(false)
 
-  const agregarAlumno = e => {
+  const obtenerDatos = async () => {
+    try{
+      const db = firebase.firestore()
+      const data = await db.collection('alumnos').get()
+      const arrayData = data.docs.map(doc => ({id: doc.id, ...doc.data()}))
+      setAlumnos(arrayData)
+      console.log(arrayData)
+
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
+  React.useEffect(()=>{
+    
+    obtenerDatos()
+
+  }, [])
+
+  const agregarAlumno = async (e) => {
     e.preventDefault()
 
     if(!(nombres.trim()&&apellidos.trim()&&edad.trim()&&identificacion.trim()&&celular.trim()&&correo.trim()&&direccion.trim())){
@@ -23,21 +43,39 @@ function App() {
       return
     }
 
-    setAlumnos([
-      ...alumnos,
-      {id: nanoid(), nombresAlumno:nombres, apellidosAlumno:apellidos, edadAlumno:edad, identificacionAlumno:identificacion, celularAlumno:celular, correoAlumno:correo, direccionAlumno:direccion}
-    ])
+    try{
+        const db = firebase.firestore()
+        const nuevoAlumno = {
+            nombresAlumno:nombres, 
+            apellidosAlumno:apellidos, 
+            edadAlumno:edad, 
+            identificacionAlumno:identificacion, 
+            celularAlumno:celular, 
+            correoAlumno:correo, 
+            direccionAlumno:direccion
+        }
+ 
+        const data = await db.collection('alumnos').add(nuevoAlumno)
 
-    setNombres('')
-    setApellidos('')
-    setEdad('')
-    setIdentificacion('')
-    setCelular('')
-    setCorreo('')
-    setDireccion('')
-    setId('')
-    setError(null)
-  }
+        setAlumnos([
+        ...alumnos,
+        {id: data.id, ...nuevoAlumno}
+        ])
+
+        setNombres('')
+        setApellidos('')
+        setEdad('')
+        setIdentificacion('')
+        setCelular('')
+        setCorreo('')
+        setDireccion('')
+        setId('')
+        setError(null)
+    }
+    catch(error){
+        console.log(error)
+    }
+}
 
   const eliminarAlumno = id => {
     const arrayAux = alumnos.filter(item => item.id !== id)
