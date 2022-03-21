@@ -172,7 +172,7 @@ function App() {
       <hr />
       <div className="row">
         <div className="col-8">
-          <h4 className="text-center">Listados de alumnos</h4>
+          <h4 className="text-center">Listado de alumnos</h4>
           <ul className="list-group">
             {
               alumnos.map(item => (
