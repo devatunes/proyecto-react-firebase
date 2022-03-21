@@ -202,21 +202,23 @@ function App() {
 
             <input
               type="text"
+              pattern="[A-Za-z ]{5,30}"
               className='form-control mb-2'
-              placeholder='Ingrese nombres'
+              placeholder='Ingrese nombres ej. Juan Luis'
               onChange={e => setNombres(e.target.value)}
               value = {nombres}
             />
             <input
               type="text"
+              pattern="[A-Za-z ]{5,30}"
               className='form-control mb-2'
-              placeholder='Ingrese apellidos'
+              placeholder='Ingrese apellidos ej. Perez Robles'
               onChange={e => setApellidos(e.target.value)}
               value = {apellidos}
             />
             <input
               type="tel"
-              pattern='\d{2}'
+              pattern='\d{1,2}'
               maxlength="2"
               min='1'
               max='99'
@@ -227,7 +229,7 @@ function App() {
             />
             <input
               type="tel"
-              pattern='\d{10}'
+              pattern='\d{7,10}'
               maxlength="10"
               className='form-control mb-2'
               placeholder='Ingrese identificación ej. 1082989235'
@@ -254,7 +256,7 @@ function App() {
             <input
               type="text"
               className='form-control mb-2'
-              placeholder='Ingrese dirección'
+              placeholder='Ingrese dirección ej. CR 17 # 25 - 40'
               onChange={e => setDireccion(e.target.value)}
               value = {direccion}
             />
