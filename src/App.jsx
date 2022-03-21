@@ -42,6 +42,16 @@ function App() {
   const eliminarAlumno = id => {
     const arrayAux = alumnos.filter(item => item.id !== id)
     setAlumnos(arrayAux)
+    setModoEdicion(false)
+    setNombres('')
+    setApellidos('')
+    setEdad('')
+    setIdentificacion('')
+    setCelular('')
+    setCorreo('')
+    setDireccion('')
+    setId('')
+    setError(null)
   }
 
   const editar = item =>{
