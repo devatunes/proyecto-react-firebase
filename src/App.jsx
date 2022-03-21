@@ -75,21 +75,29 @@ function App() {
     catch(error){
         console.log(error)
     }
-}
+  }
 
-  const eliminarAlumno = id => {
-    const arrayAux = alumnos.filter(item => item.id !== id)
-    setAlumnos(arrayAux)
-    setModoEdicion(false)
-    setNombres('')
-    setApellidos('')
-    setEdad('')
-    setIdentificacion('')
-    setCelular('')
-    setCorreo('')
-    setDireccion('')
-    setId('')
-    setError(null)
+  const eliminarAlumno = async(id) => {
+    try{
+      const db = firebase.firestore()
+      await db.collection('alumnos').doc(id).delete()
+      const arrayFiltrado = alumnos.filter(item => item.id !== id)
+      setAlumnos(arrayFiltrado)
+      setModoEdicion(false)
+      setNombres('')
+      setApellidos('')
+      setEdad('')
+      setIdentificacion('')
+      setCelular('')
+      setCorreo('')
+      setDireccion('')
+      setId('')
+      setError(null)
+    }
+    catch(error){
+      console.log(error)
+    }
+
   }
 
   const editar = item =>{
@@ -105,6 +113,46 @@ function App() {
     setId(item.id)
   }
 
+  const editarAlumno = async(e) =>{
+    e.preventDefault()
+    if(!(nombres.trim()&&apellidos.trim()&&edad.trim()&&identificacion.trim()&&celular.trim()&&correo.trim()&&direccion.trim())){
+      setError('Digite los datos faltantes')
+      return
+    }  
+
+    try{
+      const db = firebase.firestore()
+      await db.collection('alumnos').doc(id).update({
+        nombresAlumno:nombres, 
+        apellidosAlumno:apellidos, 
+        edadAlumno:edad, 
+        identificacionAlumno:identificacion, 
+        celularAlumno:celular, 
+        correoAlumno:correo, 
+        direccionAlumno:direccion
+      })
+
+      const arrayEditado = alumnos.map(
+        item => item.id === id ? {id:id, nombresAlumno:nombres, apellidosAlumno:apellidos, edadAlumno:edad, identificacionAlumno:identificacion, celularAlumno:celular, correoAlumno:correo, direccionAlumno:direccion} : item
+      )
+      
+      setAlumnos(arrayEditado)
+      setNombres('')
+      setApellidos('')
+      setEdad('')
+      setIdentificacion('')
+      setCelular('')
+      setCorreo('')
+      setDireccion('')
+      setId('')
+      setError(null)
+      setModoEdicion(false)
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
   const cancelar = () =>{
     setModoEdicion(false)
     setNombres('')
@@ -117,31 +165,7 @@ function App() {
     setId('')
     setError(null)
   }
-
-  const editarAlumno = e =>{
-    e.preventDefault()
-    if(!(nombres.trim()&&apellidos.trim()&&edad.trim()&&identificacion.trim()&&celular.trim()&&correo.trim()&&direccion.trim())){
-      setError('Digite los datos faltantes')
-      return
-    }  
-
-    const arrayEditado = alumnos.map(
-      item => item.id=== id ? {id:id, nombresAlumno:nombres, apellidosAlumno:apellidos, edadAlumno:edad, identificacionAlumno:identificacion, celularAlumno:celular, correoAlumno:correo, direccionAlumno:direccion} : item
-      )
-
-      setAlumnos(arrayEditado)
-      setNombres('')
-      setApellidos('')
-      setEdad('')
-      setIdentificacion('')
-      setCelular('')
-      setCorreo('')
-      setDireccion('')
-      setId('')
-      setError(null)
-      setModoEdicion(false)
-  }
-
+  
   return (
     <div className="container mt-5">
       <h1 className="text-center">ALUMNOS</h1>
@@ -153,7 +177,7 @@ function App() {
             {
               alumnos.map(item => (
                 <li className="list-group-item" key={item.id}>
-                  <span className="lead">{item.nombresAlumno}</span>    
+                  <span className="lead">{item.nombresAlumno} {""} {item.apellidosAlumno}</span>    
                       <button 
                         className='btn btn-danger btn-sm float-end mx-2'
                         onClick={() => eliminarAlumno(item.id)}>Eliminar</button>
