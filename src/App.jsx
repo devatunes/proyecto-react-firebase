@@ -13,7 +13,7 @@ function App() {
   const [alumnos, setAlumnos] = React.useState([])
   const [id, setId] = React.useState('')
   const [error, setError] = React.useState(null)
-  const [modoEdicion, setModoEdicion] = React.useState(false)
+  const [modoMostrar, setModoMostrar] = React.useState(false)
 
   const obtenerDatos = async () => {
     try{
@@ -37,12 +37,6 @@ function App() {
 
   const agregarAlumno = async (e) => {
     e.preventDefault()
-
-/*    if(!(nombres.trim()&&apellidos.trim()&&edad.trim()&&identificacion.trim()&&celular.trim()&&correo.trim()&&direccion.trim())){
-      setError('Digite los datos faltantes')
-      return
-    }*/
-
     try{
         const db = firebase.firestore()
         const nuevoAlumno = {
@@ -77,13 +71,13 @@ function App() {
     }
   }
 
-  const eliminarAlumno = async(id) => {
+  const eliminarAlumno = async(e) => {
     try{
       const db = firebase.firestore()
       await db.collection('alumnos').doc(id).delete()
       const arrayFiltrado = alumnos.filter(item => item.id !== id)
       setAlumnos(arrayFiltrado)
-      setModoEdicion(false)
+      setModoMostrar(false)
       setNombres('')
       setApellidos('')
       setEdad('')
@@ -94,15 +88,28 @@ function App() {
       setId('')
       setError(null)
     }
-    catch(error){
+    catch(error)
+    {
       console.log(error)
     }
 
   }
 
+  const mostrar = item =>{
+    setError(null)
+    setModoMostrar(true)
+    setNombres(item.nombresAlumno)
+    setApellidos(item.apellidosAlumno)
+    setEdad(item.edadAlumno)
+    setIdentificacion(item.identificacionAlumno)
+    setCelular(item.celularAlumno)
+    setCorreo(item.correoAlumno)
+    setDireccion(item.direccionAlumno)
+    setId(item.id)
+  }
+
   const editar = item =>{
     setError(null)
-    setModoEdicion(true)
     setNombres(item.nombresAlumno)
     setApellidos(item.apellidosAlumno)
     setEdad(item.edadAlumno)
@@ -115,11 +122,6 @@ function App() {
 
   const editarAlumno = async(e) =>{
     e.preventDefault()
-    if(!(nombres.trim()&&apellidos.trim()&&edad.trim()&&identificacion.trim()&&celular.trim()&&correo.trim()&&direccion.trim())){
-      setError('Digite los datos faltantes')
-      return
-    }  
-
     try{
       const db = firebase.firestore()
       await db.collection('alumnos').doc(id).update({
@@ -146,15 +148,16 @@ function App() {
       setDireccion('')
       setId('')
       setError(null)
-      setModoEdicion(false)
+      setModoMostrar(false)
     }
-    catch(error){
+    catch(error)
+    {
       console.log(error)
     }
   }
 
   const cancelar = () =>{
-    setModoEdicion(false)
+    setModoMostrar(false)
     setNombres('')
     setApellidos('')
     setEdad('')
@@ -196,12 +199,10 @@ function App() {
               alumnos.map(item => (
                 <li className="list-group-item" key={item.id}>
                   <span className="lead">{item.nombresAlumno} {""} {item.apellidosAlumno}</span>    
-                      <button 
-                        className='btn btn-danger btn-sm float-end mx-2'
-                        onClick={() => eliminarAlumno(item.id)}>Eliminar</button>
-                      <button 
+                    <button 
                       className='btn btn-warning btn-sm float-end'
-                      onClick ={() => editar(item)}>Editar</button>
+                      onClick ={() => mostrar(item)}>Mostrar
+                    </button>
                 </li>
               ))
             }
@@ -210,10 +211,10 @@ function App() {
         <div className="col-5">
           <h4 className="text-center">
             {
-              modoEdicion ? 'Editar Alumno' : 'Agregar Alumnno'
+              modoMostrar ? 'Mostrar Alumno' : 'Agregar Alumno'
             }
           </h4>
-          <form class="needs-validation" novalidate onSubmit={modoEdicion ? editarAlumno : agregarAlumno}>
+          <form class="needs-validation" novalidate onSubmit={modoMostrar ? editarAlumno : agregarAlumno}>
             {
               error ? <span className='text-danger'>{error}</span> : null
             }
@@ -315,22 +316,31 @@ function App() {
 
 
             {
-              modoEdicion ?
+              modoMostrar ?
               (<>
+                  <button
+                    className="btn btn-warning btn-block" 
+                    onClick ={() => editar()}>Editar
+                  </button>
+                  <button 
+                    className='btn btn-danger btn-block mx-2'
+                    onClick={() => eliminarAlumno()}>Eliminar
+                  </button>
+                  <button
+                    className="btn btn-dark btn-block" 
+                    onClick ={() => cancelar()}>Cancelar
+                  </button>
+                </>
+              )
+              : 
+              (
                 <button
-                className="btn btn-warning btn-block" 
-                type='submit'>Guardar</button>
-                <button
-                className="btn btn-dark btn-block mx-2" 
-                onClick ={() => cancelar()}>Cancelar</button>
-                </>)
-                : 
-                (<button
                   className="btn btn-dark btn-block" 
-                  type='submit'>Agregar</button>
-                  )
+                  type='submit'>Agregar
+                </button>
+              )
             }
-            
+                        
           </form>
         </div>
       </div>
