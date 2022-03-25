@@ -1,6 +1,6 @@
 //import { specialCharMap } from '@testing-library/user-event/dist/keyboard';
 import React from 'react';
-import { firebase } from './firebase';
+import { firebase } from './Firebase';
 
 function App() {
   const [nombres, setNombres] = React.useState('')
@@ -321,7 +321,7 @@ function App() {
               (<>
                 <button
                 className="btn btn-warning btn-block" 
-                type='submit'>Editar</button>
+                type='submit'>Guardar</button>
                 <button
                 className="btn btn-dark btn-block mx-2" 
                 onClick ={() => cancelar()}>Cancelar</button>
