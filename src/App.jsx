@@ -185,7 +185,7 @@ function App() {
   })()
  
   return (
-    <div className="container mt-5">
+    <div className="container mt-1">
       <h1 className="text-center">ALUMNOS</h1>
       <hr />
       <div className="row">
