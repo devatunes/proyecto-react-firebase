@@ -315,21 +315,20 @@ function App() {
               <label for="floatingDireccion">Ingrese su dirección ej. CR 17 # 25 - 40</label>
             </div>
 
-
             {
               modoMostrar ?
               (<>
                   <button
-                    className="btn btn-warning btn-block" 
+                    className="btn btn-dark btn-block" 
+                    onClick ={() => cancelar()}>Cancelar
+                  </button>
+                  <button
+                    className="btn btn-warning btn-block mx-2" 
                     onClick ={() => editar()}>Editar
                   </button>
                   <button 
-                    className='btn btn-danger btn-block mx-2'
+                    className='btn btn-danger btn-block'
                     onClick={() => eliminarAlumno()}>Eliminar
-                  </button>
-                  <button
-                    className="btn btn-dark btn-block" 
-                    onClick ={() => cancelar()}>Cancelar
                   </button>
                 </>
               )
