@@ -193,7 +193,7 @@ function App() {
       <h1 className="text-center">ALUMNOS</h1>
       <hr />
       <div className="row">
-        <div className="col-7">
+        <div className="col-6">
           <h4 className="text-center">Listado de alumnos</h4>
           <ul className="list-group">
             {
@@ -209,7 +209,7 @@ function App() {
             }
           </ul>
         </div>
-        <div className="col-5">
+        <div className="col-6">
           <h4 className="text-center">
             {
               modoMostrar ? 'Mostrar Alumno' : 'Agregar Alumno'
